@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NY旅行 2026.09.19-25</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#b8433a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NY旅行">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<style>
+  :root {
+    --bg: #faf8f5;
+    --bg-card: #ffffff;
+    --text: #2b2620;
+    --text-muted: #7a7266;
+    --accent: #b8433a;
+    --accent-soft: #f3e3d8;
+    --border: #e8e0d5;
+    --gold: #c99a3f;
+    --green: #5a7d5a;
+    --shadow: 0 2px 10px rgba(60,45,20,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1712;
+      --bg-card: #262019;
+      --text: #eee6d8;
+      --text-muted: #a89a84;
+      --accent: #e07a68;
+      --accent-soft: #3a2a22;
+      --border: #3a3226;
+      --gold: #d9ae5c;
+      --green: #8fb08a;
+      --shadow: 0 2px 10px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1712;
+    --bg-card: #262019;
+    --text: #eee6d8;
+    --text-muted: #a89a84;
+    --accent: #e07a68;
+    --accent-soft: #3a2a22;
+    --border: #3a3226;
+    --gold: #d9ae5c;
+    --green: #8fb08a;
+    --shadow: 0 2px 10px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
+    padding-bottom: 40px;
+  }
+  header {
+    padding: 22px 18px 14px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 {
+    margin: 0 0 4px;
+    font-size: 1.3rem;
+    letter-spacing: 0.02em;
+  }
+  header p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  nav {
+    display: flex;
+    overflow-x: auto;
+    gap: 6px;
+    padding: 12px 14px;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+  }
+  nav button {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  nav button.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 16px 14px;
+  }
+  .view { display: none; }
+  .view.active { display: block; }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+  .day-card .day-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .day-head .date {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .day-head .weekday {
+    color: var(--gold);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .day-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .slot {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 0.88rem;
+    border-top: 1px dashed var(--border);
+  }
+  .slot:first-of-type { border-top: none; }
+  .slot .time {
+    flex: 0 0 60px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    padding-top: 1px;
+  }
+  .slot .content b { display: block; }
+  .slot .content .sub {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+  .maps-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.74rem;
+    color: var(--accent);
+    text-decoration: none;
+    margin-top: 3px;
+  }
+  .slot.move {
+    padding: 4px 0;
+    opacity: 0.85;
+  }
+  .slot.move .time {
+    font-size: 0.72rem;
+  }
+  .slot.move .content {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .slot.move .content a.maps-link {
+    font-style: normal;
+    margin-top: 0;
+    margin-left: 6px;
+  }
+  h2.section-title {
+    font-size: 1rem;
+    margin: 4px 0 10px;
+    color: var(--accent);
+  }
+  .show-card h3 {
+    margin: 0 0 2px;
+    font-size: 1.05rem;
+  }
+  .show-card .meta {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .note {
+    font-size: 0.78rem;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 6px 10px;
+    border-radius: 8px;
+    margin-top: 6px;
+  }
+  .place-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px dashed var(--border);
+  }
+  .place-card:first-of-type { border-top: none; }
+  .place-card .name { font-weight: 600; font-size: 0.92rem; }
+  .place-card .desc { font-size: 0.78rem; color: var(--text-muted); }
+  .pill {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--border);
+    color: var(--text-muted);
+  }
+  ul.plain { margin: 6px 0 0; padding-left: 18px; font-size: 0.85rem; }
+  ul.plain li { margin-bottom: 4px; }
+
+  /* checklist */
+  .task-group-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 18px 0 6px;
+  }
+  .task-group-title:first-child { margin-top: 0; }
+  .task-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 0;
+    border-top: 1px dashed var(--border);
+  }
+  .task-row:first-of-type { border-top: none; }
+  .task-row input[type=checkbox] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--green);
+    flex-shrink: 0;
+  }
+  .task-row label {
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+  .task-row.done label {
+    color: var(--text-muted);
+    text-decoration: line-through;
+  }
+  .sync-status {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 14px;
+  }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🗽 NY旅行 2026.09.19–25</h1>
+  <p>Times Square West Hotel(BW Signature Collection)滞在</p>
+</header>
+
+<nav id="tabs">
+  <button data-view="itinerary" class="active">日程</button>
+  <button data-view="shows">ショー</button>
+  <button data-view="sightseeing">観光</button>
+  <button data-view="nearby">周辺</button>
+  <button data-view="tasks">タスク</button>
+</nav>
+
+<main>
+
+  <!-- 日程 -->
+  <div class="view active" id="view-itinerary">
+
+    <div class="card day-card">
+      <div class="day-head"><span class="date">9/19(土)</span><span class="weekday">Day 1</span></div>
+      <div class="day-tag">到着日</div>
+      <div class="slot"><div class="time">到着</div><div class="content"><b>ニューアーク・リバティ国際空港(EWR)着</b></div></div>
+      <div class="slot move"><div class="time">🚝 AirTrain</div><div class="content">ターミナル(A/B/C)内の案内表示「AirTrain / Rail Link / Train Station」に従って乗車 → Newark Liberty International Airport駅(鉄道駅)へ。空港内は無料、3〜5分間隔で運行。</div></div>
+      <div class="slot move"><div class="time">🚆 NJ Transit 約30分</div><div class="content">Newark Liberty International Airport駅でNJ Transit(Northeast Corridor線 または North Jersey Coast線)に乗車 → New York Penn Station下車<div class="sub">運賃目安 $17.25(AirTrain接続料込み)。券売機かNJ TransitアプリでNewark Airport→New York Penn Stationを指定すると接続料が自動で含まれる</div></div></div>
+      <div class="slot move"><div class="time">🚇 地下鉄 約10分</div><div class="content">Penn StationでA/C/E線(Uptown方面)に乗り換え → 50 St駅下車<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=Newark+Liberty+International+Airport&destination=548+West+48th+St+New+York+NY+10036&travelmode=transit" target="_blank">経路(空港→ホテル 全区間)</a></div></div>
+      <div class="slot"><div class="time">徒歩</div><div class="content"><b>50 St駅からホテルまで徒歩約10分</b><div class="sub">Times Square West Hotel到着・チェックイン</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=548+West+48th+St+New+York+NY+10036" target="_blank">📍地図</a></div></div>
+      <div class="note">🧳 荷物が多い場合は Newark Airport Express バス(空港→Port Authorityバスターミナル直行、$18.70程度、45〜90分)も乗り換えなしで楽。タクシー/配車サービスは $50〜80、40〜90分。</div>
+      <div class="slot"><div class="time">夜</div><div class="content"><b>タイムズスクエア周辺散策</b><div class="sub">時差ぼけに合わせて軽めに</div></div></div>
+    </div>
+
+    <div class="card day-card">
+      <div class="day-head"><span class="date">9/20(日)</span><span class="weekday">Day 2</span></div>
+      <div class="day-tag">ゴスペル&amp;ミュージカル</div>
+      <div class="slot"><div class="time">8:55</div><div class="content"><b>ゴスペルツアー集合</b><div class="sub">NY Hilton Midtown 1F グループチェックインカウンター(6th Ave、53St〜54St間)</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=New+York+Hilton+Midtown+6th+Ave+53rd+St+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot move"><div class="time">🚶 徒歩約10分</div><div class="content">ホテル → Hilton Midtown<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=548+West+48th+St+New+York+NY+10036&destination=New+York+Hilton+Midtown&travelmode=walking" target="_blank">経路</a></div></div>
+      <div class="slot"><div class="time">9:00</div><div class="content"><b>ゴスペル・ウォーキングツアー出発</b></div></div>
+      <div class="slot"><div class="time">14:00</div><div class="content"><b>Wicked(マチネ)</b><div class="sub">Gershwin Theatre ・ 座席 FMEZZ Row D 109-110</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Gershwin+Theatre+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">夜</div><div class="content"><b>空き枠 — 追加ショー検討中</b><div class="sub">SIX ○19:00 / Rocky Horror Show ○19:00 / Heathers × / Great Gatsby ×</div></div></div>
+    </div>
+
+    <div class="card day-card">
+      <div class="day-head"><span class="date">9/21(月)</span><span class="weekday">Day 3</span></div>
+      <div class="day-tag">ブルックリン観光デー</div>
+      <div class="slot"><div class="time">午前〜午後</div><div class="content"><b>ブルックリン散策</b><div class="sub">ブルックリン・ブリッジ、DUMBO等</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Brooklyn+Bridge+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot move"><div class="time">🚇 移動</div><div class="content">マンハッタンへ戻る道中に立ち寄り<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=DUMBO+Brooklyn&destination=Grand+Central+Terminal+New+York&travelmode=transit" target="_blank">経路</a></div></div>
+      <div class="slot"><div class="time">夕方</div><div class="content"><b>グランド・セントラル駅 途中下車・見学(30分)</b><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Grand+Central+Terminal+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">夜</div><div class="content"><b>空き枠 — 追加ショー検討中</b><div class="sub">SIX ○19:00 / Heathers ○19:00 / Great Gatsby ○19:00 / Rocky Horror ×</div></div></div>
+    </div>
+
+    <div class="card day-card">
+      <div class="day-head"><span class="date">9/22(火)</span><span class="weekday">Day 4</span></div>
+      <div class="day-tag">自然史博物館&amp;セントラルパーク&amp;Hamilton</div>
+      <div class="slot move"><div class="time">🚶+🚇 約25分</div><div class="content">ホテル → 徒歩で42 St-Port Authority駅(約15分) → 地下鉄C線(Uptown)で81 St-Museum of Natural History駅(約10分)<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=548+West+48th+St+New+York+NY+10036&destination=American+Museum+of+Natural+History&travelmode=transit" target="_blank">経路(ホテル→AMNH)</a></div></div>
+      <div class="slot"><div class="time">10:00</div><div class="content"><b>American Museum of Natural History</b><div class="sub">81 St駅の改札から博物館地下入口へ直結</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=American+Museum+of+Natural+History" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">14:00</div><div class="content"><b>セントラルパーク散策</b><div class="sub">博物館前(Central Park West)から公園内へ、約1時間</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Central+Park+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">15:00</div><div class="content"><b>カフェ休憩・ディナー</b></div></div>
+      <div class="slot"><div class="time">18:30</div><div class="content"><b>劇場入り</b><div class="sub">Richard Rodgers Theatre(開演30分前)</div></div></div>
+      <div class="slot"><div class="time">19:00</div><div class="content"><b>Hamilton</b><div class="sub">Richard Rodgers Theatre ・ 座席 FMEZZ Row C 109-110</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Richard+Rodgers+Theatre+New+York" target="_blank">📍地図</a></div></div>
+    </div>
+
+    <div class="card day-card">
+      <div class="day-head"><span class="date">9/23(水)</span><span class="weekday">Day 5</span></div>
+      <div class="day-tag">ユニオンスクエア&amp;ソーホー&amp;Hadestown</div>
+      <div class="slot move"><div class="time">🚶+🚇 約25分</div><div class="content">ホテル → 徒歩で50 St駅(C・E線、約10分) → 地下鉄で乗り換えて14 St-Union Sq駅へ(所要目安・実際の乗換はリンク先で要確認)<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=548+West+48th+St+New+York+NY+10036&destination=Union+Square+Greenmarket+New+York&travelmode=transit" target="_blank">経路(ホテル→ユニオンスクエア)</a></div></div>
+      <div class="slot"><div class="time">9:00</div><div class="content"><b>ユニオンスクエア・グリーンマーケット</b><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Union+Square+Greenmarket+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot move"><div class="time">🚶 徒歩</div><div class="content">SoHoへ移動(徒歩ルート上でFishs Eddyに立ち寄り)<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=Union+Square+Greenmarket+New+York&destination=SoHo+New+York&travelmode=walking" target="_blank">経路</a></div></div>
+      <div class="slot"><div class="time">途中</div><div class="content"><b>Fishs Eddy</b><div class="sub">889 Broadway, New York, NY 10003</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Fishs+Eddy+889+Broadway+New+York+NY+10003" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">日中</div><div class="content"><b>SoHo・West Village散策</b><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=SoHo+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">19:30</div><div class="content"><b>Hadestown</b><div class="sub">Walter Kerr Theatre ・ Mezzanine Front Center D107-108 ※エレベーターなし</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Walter+Kerr+Theatre+New+York" target="_blank">📍地図</a></div></div>
+    </div>
+
+    <div class="card day-card">
+      <div class="day-head"><span class="date">9/24(木)</span><span class="weekday">Day 6</span></div>
+      <div class="day-tag">自由行動 / 空き夜</div>
+      <div class="slot"><div class="time">終日</div><div class="content"><b>自由行動(観光)</b><div class="sub">候補: ブロードウェイ博物館 等</div></div></div>
+      <div class="slot"><div class="time">夜</div><div class="content"><b>空き枠 — 追加ショー検討中</b><div class="sub">SIX ○19:00 / Rocky Horror ○19:00 / Heathers ○19:30 / Great Gatsby ○20:00(14:00マチネもあり) — 選択肢が最も豊富</div></div></div>
+    </div>
+
+    <div class="card day-card">
+      <div class="day-head"><span class="date">9/25(金)</span><span class="weekday">Day 7</span></div>
+      <div class="day-tag">帰国日 ・ EWR発 10:00</div>
+      <div class="note">✈ フライトはニューアーク空港(EWR)10:00発と仮定して計算しています(往路と同じ空港)。国際線は出発3時間前の空港到着が目安のため、空港着7:00を目標に逆算しました。</div>
+      <div class="slot"><div class="time">5:15</div><div class="content"><b>ホテルをチェックアウト</b><div class="sub">公共交通機関を使う場合の目安出発時刻</div></div></div>
+      <div class="slot move"><div class="time">🚶 徒歩約10分</div><div class="content">ホテル → 50 St駅(C・E線)</div></div>
+      <div class="slot move"><div class="time">🚇 地下鉄 約10分</div><div class="content">50 St駅 → New York Penn Station(C/E線)</div></div>
+      <div class="slot move"><div class="time">🚆 NJ Transit 約30分</div><div class="content">Penn Station → Newark Liberty International Airport駅<div class="sub">早朝は本数が少ないため、前日にNJ Transitアプリで始発時刻を要確認</div></div></div>
+      <div class="slot move"><div class="time">🚝 AirTrain 約5〜10分</div><div class="content">空港駅 → 各ターミナル<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=548+West+48th+St+New+York+NY+10036&destination=Newark+Liberty+International+Airport&travelmode=transit" target="_blank">経路(ホテル→空港 全区間)</a></div></div>
+      <div class="slot"><div class="time">7:00</div><div class="content"><b>空港到着目標</b><div class="sub">チェックイン・保安検査を済ませ余裕をもって搭乗ゲートへ</div></div></div>
+      <div class="slot"><div class="time">10:00</div><div class="content"><b>フライト出発</b></div></div>
+      <div class="note">🚕 タクシー/配車サービスなら所要約45〜60分(早朝は道路が空いていて読みやすい)。この場合はホテル出発を6:00前後に。同行者の人数・荷物量に応じて選んでください。</div>
+    </div>
+
+  </div>
+
+  <!-- ショー -->
+  <div class="view" id="view-shows">
+    <h2 class="section-title">確定チケット</h2>
+
+    <div class="card show-card">
+      <h3>Wicked</h3>
+      <div class="meta">9/20(日) 14:00(マチネ) ・ Gershwin Theatre ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Gershwin+Theatre+New+York" target="_blank">📍地図</a></div>
+      <div class="note">Broadway Direct経由で購入済み ・ FMEZZ Row D 109-110</div>
+    </div>
+
+    <div class="card show-card">
+      <h3>Hamilton</h3>
+      <div class="meta">9/22(火) 19:00 ・ Richard Rodgers Theatre ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Richard+Rodgers+Theatre+New+York" target="_blank">📍地図</a></div>
+      <div class="note">FMEZZ Row C 109-110 ・ 18:30劇場入り</div>
+    </div>
+
+    <div class="card show-card">
+      <h3>Hadestown</h3>
+      <div class="meta">9/23(水) 19:30 ・ Walter Kerr Theatre ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Walter+Kerr+Theatre+New+York" target="_blank">📍地図</a></div>
+      <div class="note">Mezzanine Front Center D107-108 ・ ⚠ 劇場にエレベーターなし(階段のみ)</div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:22px;">検討中(空き夜 9/20・9/21・9/24)</h2>
+    <div class="card">
+      <p style="font-size:0.85rem; font-weight:600; margin:0 0 4px;">9/20(日)夜</p>
+      <ul class="plain" style="margin-bottom:10px;">
+        <li>SIX ○19:00 / Rocky Horror Show ○19:00</li>
+        <li>Heathers × / Great Gatsby ×(15:00公演のみ)</li>
+      </ul>
+      <p style="font-size:0.85rem; font-weight:600; margin:0 0 4px;">9/21(月)夜</p>
+      <ul class="plain" style="margin-bottom:10px;">
+        <li>SIX ○19:00 / Heathers ○19:00 / Great Gatsby ○19:00</li>
+        <li>Rocky Horror Show ×</li>
+      </ul>
+      <p style="font-size:0.85rem; font-weight:600; margin:0 0 4px;">9/24(木)夜 <span style="font-weight:400; color:var(--text-muted);">— 選択肢が最も豊富</span></p>
+      <ul class="plain">
+        <li>SIX ○19:00 / Rocky Horror Show ○19:00</li>
+        <li>Heathers ○19:30(14:00マチネもあり) / Great Gatsby ○20:00(14:00マチネもあり)</li>
+      </ul>
+    </div>
+
+    <h2 class="section-title" style="margin-top:22px;">割引コード(Broadway Week)</h2>
+    <div class="card">
+      <p style="font-size:0.85rem; margin:0 0 6px;">有効期限: 9/20まで</p>
+      <ul class="plain">
+        <li>241BWSHOW</li>
+        <li>UPBWSHOW</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 観光 -->
+  <div class="view" id="view-sightseeing">
+    <h2 class="section-title">観光候補地</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">Brooklyn Bridge / DUMBO</div><div class="desc">橋の眺望とおしゃれエリア ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Brooklyn+Bridge+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
+      <div class="place-card"><div><div class="name">American Museum of Natural History</div><div class="desc">自然史博物館 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=American+Museum+of+Natural+History" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">Central Park</div><div class="desc">散策・休憩 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Central+Park+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
+      <div class="place-card"><div><div class="name">Grand Central Terminal</div><div class="desc">駅舎見学 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Grand+Central+Terminal+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">Union Square Greenmarket</div><div class="desc">マーケット ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Union+Square+Greenmarket+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
+      <div class="place-card"><div><div class="name">SoHo / West Village</div><div class="desc">街歩き・ショッピング ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=SoHo+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
+      <div class="place-card"><div><div class="name">Fishs Eddy</div><div class="desc">雑貨店 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Fishs+Eddy+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+    </div>
+
+  </div>
+
+  <!-- 周辺 -->
+  <div class="view" id="view-nearby">
+    <h2 class="section-title">ホテル周辺の便利スポット <span style="font-weight:400; color:var(--text-muted); font-size:0.72rem;">(548 W 48th St 起点)</span></h2>
+
+    <h2 class="section-title" style="margin-top:4px; font-size:0.85rem;">🛒 スーパー・食料品店</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">5 Brothers Gourmet Market</div><div class="desc">689 10th Ave ・ 徒歩約2分(193m)・24時間営業 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=5+Brothers+Gourmet+Market+689+10th+Ave+New+York" target="_blank">📍地図</a></div></div><span class="pill">最寄り</span></div>
+      <div class="place-card"><div><div class="name">Sunrise Market Place</div><div class="desc">612 11th Ave ・ 徒歩約3分(201m)・24時間営業(デリ) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Sunrise+Market+Place+612+11th+Ave+New+York" target="_blank">📍地図</a></div></div></div>
+      <div class="place-card"><div><div class="name">Food Emporium</div><div class="desc">452 W 43rd St ・ 徒歩約6分(483m)・本格的なスーパー ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Food+Emporium+452+W+43rd+St+New+York" target="_blank">📍地図</a></div></div></div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">🏪 コンビニ的なお店</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">459 Convenience Store</div><div class="desc">459 W 50th St ・ 徒歩約4分(302m) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=459+Convenience+Store+459+W+50th+St+New+York" target="_blank">📍地図</a></div></div><span class="pill">最寄り</span></div>
+      <div class="place-card"><div><div class="name">Hudson Market Place</div><div class="desc">755 9th Ave ・ 徒歩約7分(526m)・24時間営業 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Hudson+Market+Place+755+9th+Ave+New+York" target="_blank">📍地図</a></div></div></div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">💊 ドラッグストア</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">Duane Reade</div><div class="desc">721 9th Ave ・ 徒歩約6分(471m)・処方箋薬局併設 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Duane+Reade+721+9th+Ave+New+York" target="_blank">📍地図</a></div></div><span class="pill">最寄り</span></div>
+      <div class="note">日用品・市販薬も揃うタイプの店舗です。徒歩5分圏内には該当店舗がなく、これが最寄りです。</div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">☕ カフェ・コーヒー</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">Farmers Cafe & Market</div><div class="desc">721 11th Ave ・ 徒歩約4分(289m)・24時間営業 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Farmers+Cafe+Market+721+11th+Ave+New+York" target="_blank">📍地図</a></div></div><span class="pill">最寄り</span></div>
+      <div class="place-card"><div><div class="name">Afficionado Coffee Roasters</div><div class="desc">750 11th Ave ・ 徒歩約5分(411m)・本格派コーヒー ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Afficionado+Coffee+Roasters+750+11th+Ave+New+York" target="_blank">📍地図</a></div></div></div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">🚌 バス停(徒歩5分以内)</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">11 Av/W 50 St</div><div class="desc">徒歩約3分(205m) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=40.765989,-73.994639" target="_blank">📍地図</a></div></div><span class="pill">最寄り</span></div>
+      <div class="place-card"><div><div class="name">10 Av/W 47 St</div><div class="desc">徒歩約3分(217m) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=40.763023,-73.992874" target="_blank">📍地図</a></div></div></div>
+      <div class="place-card"><div><div class="name">W 50 St/10 Av</div><div class="desc">徒歩約4分(278m) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=40.7645,-73.9917" target="_blank">📍地図</a></div></div></div>
+      <div class="place-card"><div><div class="name">10 Av/W 45 St</div><div class="desc">徒歩約4分(286m) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=40.761749,-73.993797" target="_blank">📍地図</a></div></div></div>
+      <div class="note">10番街沿い(M11系統)・11番街沿い(M50系統)の可能性が高いですが、路線番号は現地の停留所表示で要確認。</div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">🚇 最寄り駅(地下鉄)</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">50 St駅(C・E線/8th Ave)</div><div class="desc">徒歩約10分(780m) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=50+St+Subway+Station+8th+Ave+New+York" target="_blank">📍地図</a></div></div><span class="pill">最寄り</span></div>
+      <div class="place-card"><div><div class="name">50 St駅(1線/Broadway)</div><div class="desc">徒歩約12分(975m) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=50+St+1+Train+Broadway+New+York" target="_blank">📍地図</a></div></div></div>
+      <div class="note">⚠ ホテルは9番街・10番街の間(48丁目)にあり、地下鉄駅からは少し離れています。5分圏内に駅はなく、最寄りでも徒歩約10分が目安です。近距離の移動はバス(M50など)も選択肢になります。</div>
+    </div>
+  </div>
+
+  <!-- タスク -->
+  <div class="view" id="view-tasks">
+    <h2 class="section-title">やることリスト <span style="font-weight:400; color:var(--text-muted); font-size:0.75rem;">(抽選・ラッシュ関連)</span></h2>
+    <div class="card" id="task-container">
+      <p style="font-size:0.85rem; color:var(--text-muted);">読み込み中…</p>
+    </div>
+    <div class="sync-status" id="sync-status"></div>
+  </div>
+
+</main>
+
+<script>
+  // タブ切替
+  document.querySelectorAll('#tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#tabs button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('view-' + btn.dataset.view).classList.add('active');
+    });
+  });
+
+  // ---- 共有タスクリスト (db capability) ----
+  const DEFAULT_TASKS = [
+    { group: "毎日(到着後〜)", items: [
+      { id: "t1", text: "Broadway Direct 抽選に応募する", done: false },
+    ]},
+    { group: "9/20(日)夜", items: [
+      { id: "t2", text: "SIX または Rocky Horror Show の抽選・ラッシュ確認", done: false },
+    ]},
+    { group: "9/21(月)夜", items: [
+      { id: "t3", text: "SIX / Heathers / Great Gatsby いずれかの抽選・ラッシュ確認(rush.telecharge.com)", done: false },
+    ]},
+    { group: "9/24(木)夜", items: [
+      { id: "t4", text: "SIX / Rocky Horror / Heathers / Great Gatsby から選んで抽選・ラッシュ確認", done: false },
+    ]},
+  ];
+
+  const container = document.getElementById('task-container');
+  const statusEl = document.getElementById('sync-status');
+  const STORAGE_KEY = 'ny_trip_tasks_v2';
+
+  function loadGroups() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* ignore */ }
+    return DEFAULT_TASKS;
+  }
+
+  function saveGroups(groups) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(groups));
+    } catch (e) { /* ignore */ }
+  }
+
+  function renderTasks(groups) {
+    container.innerHTML = '';
+    groups.forEach(g => {
+      const h = document.createElement('div');
+      h.className = 'task-group-title';
+      h.textContent = g.group;
+      container.appendChild(h);
+      g.items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'task-row' + (item.done ? ' done' : '');
+        row.innerHTML = `
+          <input type="checkbox" id="${item.id}" ${item.done ? 'checked' : ''}>
+          <label for="${item.id}">${item.text}</label>
+        `;
+        row.querySelector('input').addEventListener('change', (e) => {
+          toggleTask(groups, item.id, e.target.checked);
+        });
+        container.appendChild(row);
+      });
+    });
+  }
+
+  function toggleTask(groups, id, checked) {
+    groups.forEach(g => g.items.forEach(it => { if (it.id === id) it.done = checked; }));
+    saveGroups(groups);
+    renderTasks(groups);
+  }
+
+  const initialGroups = loadGroups();
+  renderTasks(initialGroups);
+  statusEl.textContent = 'このチェックはこの端末・このブラウザにのみ保存されます(他の人とは同期しません)';
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js').catch(() => {});
+    });
+  }
+</script>
+
+</body>
+</html>

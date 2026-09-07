@@ -4,13 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NY旅行 2026.09.19-25</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#b8433a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="NY旅行">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="icon" href="icon-192.png">
 <style>
   :root {
     --bg: #faf8f5;
@@ -114,6 +107,54 @@
     padding: 14px 16px;
     margin-bottom: 12px;
     box-shadow: var(--shadow);
+  }
+  .meal-toggle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .meal-btn {
+    flex: 1 1 calc(50% - 4px);
+    padding: 9px 0;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+  .meal-btn.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .gourmet-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .rest-meta {
+    font-size: 0.72rem;
+    color: var(--gold);
+    margin-top: 2px;
+  }
+  .day-select {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text);
+    font-size: 0.9rem;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%), linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+    background-position: calc(100% - 20px) center, calc(100% - 15px) center;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
   }
   .day-card .day-head {
     display: flex;
@@ -277,6 +318,7 @@
   <button data-view="itinerary" class="active">日程</button>
   <button data-view="shows">ショー</button>
   <button data-view="sightseeing">観光</button>
+  <button data-view="gourmet">グルメ</button>
   <button data-view="nearby">周辺</button>
   <button data-view="tasks">タスク</button>
 </nav>
@@ -286,67 +328,90 @@
   <!-- 日程 -->
   <div class="view active" id="view-itinerary">
 
-    <div class="card day-card">
+    <select id="day-select" class="day-select">
+      <option value="day-1">9/19(土)Day1 ・ 到着日</option>
+      <option value="day-2">9/20(日)Day2 ・ ゴスペル&amp;Wicked</option>
+      <option value="day-3">9/21(月)Day3 ・ グランドセントラル&amp;ブルックリン</option>
+      <option value="day-4">9/22(火)Day4 ・ AMNH&amp;セントラルパーク&amp;Hamilton</option>
+      <option value="day-5">9/23(水)Day5 ・ ユニオンスクエア&amp;SoHo&amp;Hadestown</option>
+      <option value="day-6">9/24(木)Day6 ・ ブロードウェイ博物館&amp;トリニティ教会</option>
+      <option value="day-7">9/25(金)Day7 ・ 帰国日</option>
+    </select>
+
+    <div class="card day-card" id="day-1">
       <div class="day-head"><span class="date">9/19(土)</span><span class="weekday">Day 1</span></div>
       <div class="day-tag">到着日</div>
-      <div class="slot"><div class="time">到着</div><div class="content"><b>ニューアーク・リバティ国際空港(EWR)着</b></div></div>
+      <div class="slot"><div class="time">17:40</div><div class="content"><b>ニューアーク・リバティ国際空港(EWR)着</b></div></div>
       <div class="slot move"><div class="time">🚝 AirTrain</div><div class="content">ターミナル(A/B/C)内の案内表示「AirTrain / Rail Link / Train Station」に従って乗車 → Newark Liberty International Airport駅(鉄道駅)へ。空港内は無料、3〜5分間隔で運行。</div></div>
-      <div class="slot move"><div class="time">🚆 NJ Transit 約30分</div><div class="content">Newark Liberty International Airport駅でNJ Transit(Northeast Corridor線 または North Jersey Coast線)に乗車 → New York Penn Station下車<div class="sub">運賃目安 $17.25(AirTrain接続料込み)。券売機かNJ TransitアプリでNewark Airport→New York Penn Stationを指定すると接続料が自動で含まれる</div></div></div>
-      <div class="slot move"><div class="time">🚇 地下鉄 約10分</div><div class="content">Penn StationでA/C/E線(Uptown方面)に乗り換え → 50 St駅下車<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=Newark+Liberty+International+Airport&destination=548+West+48th+St+New+York+NY+10036&travelmode=transit" target="_blank">経路(空港→ホテル 全区間)</a></div></div>
-      <div class="slot"><div class="time">徒歩</div><div class="content"><b>50 St駅からホテルまで徒歩約10分</b><div class="sub">Times Square West Hotel到着・チェックイン</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=548+West+48th+St+New+York+NY+10036" target="_blank">📍地図</a></div></div>
+      <div class="slot move"><div class="time">🚆 NJ Transit 約25分</div><div class="content">Newark Liberty International Airport駅でNJ Transitに乗車 → New York Penn Station下車</div></div>
+      <div class="slot move"><div class="time">🚶+🚇 地下鉄A・C・E線</div><div class="content">Penn Stationから徒歩または地下鉄でホテルへ<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=Newark+Liberty+International+Airport&destination=548+West+48th+St+New+York+NY+10036&travelmode=transit" target="_blank">経路(空港→ホテル 全区間)</a></div></div>
+      <div class="slot"><div class="time">到着</div><div class="content"><b>ホテル到着</b><div class="sub">所要45〜60分・運賃目安 $15.75</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=548+West+48th+St+New+York+NY+10036" target="_blank">📍地図</a></div></div>
       <div class="note">🧳 荷物が多い場合は Newark Airport Express バス(空港→Port Authorityバスターミナル直行、$18.70程度、45〜90分)も乗り換えなしで楽。タクシー/配車サービスは $50〜80、40〜90分。</div>
-      <div class="slot"><div class="time">夜</div><div class="content"><b>タイムズスクエア周辺散策</b><div class="sub">時差ぼけに合わせて軽めに</div></div></div>
+      <div class="note">🏨 ホテル特典:無料朝食ビュッフェあり。客室にKeurig式コーヒーメーカー(ケトルなし)。フィットネスセンターあり(規模は控えめ)。</div>
+      <div class="slot"><div class="time">夜</div><div class="content"><b>ホテルチェックイン・夕食</b><div class="sub">時差ぼけに合わせて軽めに</div></div></div>
     </div>
 
-    <div class="card day-card">
+    <div class="card day-card" id="day-2">
       <div class="day-head"><span class="date">9/20(日)</span><span class="weekday">Day 2</span></div>
-      <div class="day-tag">ゴスペル&amp;ミュージカル</div>
-      <div class="slot"><div class="time">8:55</div><div class="content"><b>ゴスペルツアー集合</b><div class="sub">NY Hilton Midtown 1F グループチェックインカウンター(6th Ave、53St〜54St間)</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=New+York+Hilton+Midtown+6th+Ave+53rd+St+New+York" target="_blank">📍地図</a></div></div>
+      <div class="day-tag">ゴスペル&amp;Wicked</div>
+      <div class="slot"><div class="time">8:55</div><div class="content"><b>ゴスペルツアー集合</b><div class="sub">NYヒルトン ミッドタウン 1階奥グループチェックインカウンター前(6th Ave. bet. 53-54 St.)。正面玄関から突き当りまで進み、左手Herb N Kitchen・右手売店・正面レストルーム付近のカウンター</div><a class="maps-link" href="https://www.google.com/maps/place/%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%A8%E3%83%BC%E3%82%AF+%E3%83%92%E3%83%AB%E3%83%88%E3%83%B3+%E3%83%9F%E3%83%83%E3%83%89%E3%82%BF%E3%82%A6%E3%83%B3/@40.7622481,-73.9817649,17z" target="_blank">📍地図</a></div></div>
       <div class="slot move"><div class="time">🚶 徒歩約10分</div><div class="content">ホテル → Hilton Midtown<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=548+West+48th+St+New+York+NY+10036&destination=New+York+Hilton+Midtown&travelmode=walking" target="_blank">経路</a></div></div>
-      <div class="slot"><div class="time">9:00</div><div class="content"><b>ゴスペル・ウォーキングツアー出発</b></div></div>
-      <div class="slot"><div class="time">14:00</div><div class="content"><b>Wicked(マチネ)</b><div class="sub">Gershwin Theatre ・ 座席 FMEZZ Row D 109-110</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Gershwin+Theatre+New+York" target="_blank">📍地図</a></div></div>
-      <div class="slot"><div class="time">夜</div><div class="content"><b>空き枠 — 追加ショー検討中</b><div class="sub">SIX ○19:00 / Rocky Horror Show ○19:00 / Heathers × / Great Gatsby ×</div></div></div>
+      <div class="slot"><div class="time">9:00-12:15</div><div class="content"><b>サンデーゴスペルウォーキングツアー</b><div class="sub">地下鉄で行く形式、食事なし、ハーレムにて解散</div></div></div>
+      <div class="slot"><div class="time">12:15-13:00</div><div class="content"><b>タイムズスクエアへ移動&amp;軽食</b></div></div>
+      <div class="slot"><div class="time">13:00</div><div class="content"><b>劇場入り</b><div class="sub">Gershwin Theatre(開演1時間前)</div></div></div>
+      <div class="slot"><div class="time">14:00-16:45</div><div class="content"><b>Wicked(マチネ)</b><div class="sub">Gershwin Theatre ・ 222 W 51st St ・ 座席 FMEZZ Row D 109-110</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Gershwin+Theatre+222+W+51st+St+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">16:45〜</div><div class="content"><b>空き枠 — 追加ショー検討中</b><div class="sub">SIX ○19:00 / Rocky Horror Show ○19:00 / Heathers × / Great Gatsby × ・ 夕食候補:エレンズ・スターダスト・ダイナー</div></div></div>
     </div>
 
-    <div class="card day-card">
+    <div class="card day-card" id="day-3">
       <div class="day-head"><span class="date">9/21(月)</span><span class="weekday">Day 3</span></div>
-      <div class="day-tag">ブルックリン観光デー</div>
-      <div class="slot"><div class="time">午前〜午後</div><div class="content"><b>ブルックリン散策</b><div class="sub">ブルックリン・ブリッジ、DUMBO等</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Brooklyn+Bridge+New+York" target="_blank">📍地図</a></div></div>
-      <div class="slot move"><div class="time">🚇 移動</div><div class="content">マンハッタンへ戻る道中に立ち寄り<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=DUMBO+Brooklyn&destination=Grand+Central+Terminal+New+York&travelmode=transit" target="_blank">経路</a></div></div>
-      <div class="slot"><div class="time">夕方</div><div class="content"><b>グランド・セントラル駅 途中下車・見学(30分)</b><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Grand+Central+Terminal+New+York" target="_blank">📍地図</a></div></div>
-      <div class="slot"><div class="time">夜</div><div class="content"><b>空き枠 — 追加ショー検討中</b><div class="sub">SIX ○19:00 / Heathers ○19:00 / Great Gatsby ○19:00 / Rocky Horror ×</div></div></div>
+      <div class="day-tag">グランドセントラル&amp;ブルックリン観光デー</div>
+      <div class="slot"><div class="time">9:35</div><div class="content"><b>ホテル出発</b></div></div>
+      <div class="slot move"><div class="time">🚶+🚇 約20分</div><div class="content">50 St駅(C/E線)→42 St-Port Authority駅→地下通路でTimes Sq-42 St駅→Sトレイン(42 St Shuttle)でGrand Central-42 St駅</div></div>
+      <div class="slot"><div class="time">10:00</div><div class="content"><b>グランド・セントラル駅 見学</b><div class="sub">近くにMidtown Comics Grand Centralあり</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Grand+Central+Terminal+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">11:30</div><div class="content"><b>ランチ:Ben and Jack's Steakhouse 44th Street</b><div class="sub">✅予約確定・2名・予約名 MANAMI KINJOU・確認番号 2109838294・219 East 44th Street・Tel (212) 682-5678</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Ben+and+Jack's+Steakhouse+219+East+44th+Street+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">午後〜夕方</div><div class="content"><b>ブルックリン散策</b><div class="sub">ブルックリン・ブリッジ、DUMBO。候補:DUMBO Manhattan Bridge View、Annie's Blue Ribbon General Store</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Brooklyn+Bridge+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">夜</div><div class="content"><b>マンハッタンへ移動/自由行動</b><div class="sub">空き枠 — 追加ショー検討中:SIX ○19:00 / Heathers ○19:00 / Great Gatsby ○19:00 / Rocky Horror × ・ 夕食候補:エレンズ・スターダスト・ダイナー</div></div></div>
     </div>
 
-    <div class="card day-card">
+    <div class="card day-card" id="day-4">
       <div class="day-head"><span class="date">9/22(火)</span><span class="weekday">Day 4</span></div>
       <div class="day-tag">自然史博物館&amp;セントラルパーク&amp;Hamilton</div>
       <div class="slot move"><div class="time">🚶+🚇 約25分</div><div class="content">ホテル → 徒歩で42 St-Port Authority駅(約15分) → 地下鉄C線(Uptown)で81 St-Museum of Natural History駅(約10分)<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=548+West+48th+St+New+York+NY+10036&destination=American+Museum+of+Natural+History&travelmode=transit" target="_blank">経路(ホテル→AMNH)</a></div></div>
       <div class="slot"><div class="time">10:00</div><div class="content"><b>American Museum of Natural History</b><div class="sub">81 St駅の改札から博物館地下入口へ直結</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=American+Museum+of+Natural+History" target="_blank">📍地図</a></div></div>
       <div class="slot"><div class="time">14:00</div><div class="content"><b>セントラルパーク散策</b><div class="sub">博物館前(Central Park West)から公園内へ、約1時間</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Central+Park+New+York" target="_blank">📍地図</a></div></div>
-      <div class="slot"><div class="time">15:00</div><div class="content"><b>カフェ休憩・ディナー</b></div></div>
-      <div class="slot"><div class="time">18:30</div><div class="content"><b>劇場入り</b><div class="sub">Richard Rodgers Theatre(開演30分前)</div></div></div>
+      <div class="slot"><div class="time">15:00-18:00</div><div class="content"><b>カフェ休憩・ディナー</b></div></div>
+      <div class="slot"><div class="time">18:00</div><div class="content"><b>劇場入り</b><div class="sub">Richard Rodgers Theatre(開演1時間前)</div></div></div>
       <div class="slot"><div class="time">19:00</div><div class="content"><b>Hamilton</b><div class="sub">Richard Rodgers Theatre ・ 座席 FMEZZ Row C 109-110</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Richard+Rodgers+Theatre+New+York" target="_blank">📍地図</a></div></div>
     </div>
 
-    <div class="card day-card">
+    <div class="card day-card" id="day-5">
       <div class="day-head"><span class="date">9/23(水)</span><span class="weekday">Day 5</span></div>
       <div class="day-tag">ユニオンスクエア&amp;ソーホー&amp;Hadestown</div>
-      <div class="slot move"><div class="time">🚶+🚇 約25分</div><div class="content">ホテル → 徒歩で50 St駅(C・E線、約10分) → 地下鉄で乗り換えて14 St-Union Sq駅へ(所要目安・実際の乗換はリンク先で要確認)<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=548+West+48th+St+New+York+NY+10036&destination=Union+Square+Greenmarket+New+York&travelmode=transit" target="_blank">経路(ホテル→ユニオンスクエア)</a></div></div>
-      <div class="slot"><div class="time">9:00</div><div class="content"><b>ユニオンスクエア・グリーンマーケット</b><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Union+Square+Greenmarket+New+York" target="_blank">📍地図</a></div></div>
-      <div class="slot move"><div class="time">🚶 徒歩</div><div class="content">SoHoへ移動(徒歩ルート上でFishs Eddyに立ち寄り)<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=Union+Square+Greenmarket+New+York&destination=SoHo+New+York&travelmode=walking" target="_blank">経路</a></div></div>
-      <div class="slot"><div class="time">途中</div><div class="content"><b>Fishs Eddy</b><div class="sub">889 Broadway, New York, NY 10003</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Fishs+Eddy+889+Broadway+New+York+NY+10003" target="_blank">📍地図</a></div></div>
-      <div class="slot"><div class="time">日中</div><div class="content"><b>SoHo・West Village散策</b><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=SoHo+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">朝食</div><div class="content"><b>パンケーキ</b><div class="sub">店未定</div></div></div>
+      <div class="slot"><div class="time">9:55</div><div class="content"><b>ホテル出発</b></div></div>
+      <div class="slot move"><div class="time">🚶+🚇 約30分</div><div class="content">50 St駅(C/E線)→42 St-Port Authority駅→地下通路でTimes Sq-42 St駅→1/2/3系統Downtownで14 St-Union Sq駅<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=548+West+48th+St+New+York+NY+10036&destination=Union+Square+Greenmarket+New+York&travelmode=transit" target="_blank">経路(ホテル→ユニオンスクエア)</a></div></div>
+      <div class="slot"><div class="time">10:30-12:30</div><div class="content"><b>ユニオンスクエア・グリーンマーケット</b><div class="sub">月・水・金・土開催</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Union+Square+Greenmarket+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot move"><div class="time">🚶 徒歩約20〜25分</div><div class="content">ブロードウェイを南下してSoHoへ<a class="maps-link" href="https://www.google.com/maps/dir/?api=1&origin=Union+Square+Greenmarket+New+York&destination=SoHo+New+York&travelmode=walking" target="_blank">経路</a></div></div>
+      <div class="slot"><div class="time">13:00</div><div class="content"><b>Fishs Eddy 立ち寄り</b><div class="sub">889 Broadway, New York, NY 10003</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Fishs+Eddy+889+Broadway+New+York+NY+10003" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">13:30-18:00</div><div class="content"><b>SoHo〜ウエストビレッジ散策・買い物・カフェ巡り</b></div></div>
+      <div class="slot"><div class="time">18:00-18:30</div><div class="content"><b>ディナー・休憩</b></div></div>
+      <div class="slot"><div class="time">18:30</div><div class="content"><b>劇場入り</b><div class="sub">Walter Kerr Theatre(開演1時間前)</div></div></div>
       <div class="slot"><div class="time">19:30</div><div class="content"><b>Hadestown</b><div class="sub">Walter Kerr Theatre ・ Mezzanine Front Center D107-108 ※エレベーターなし</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Walter+Kerr+Theatre+New+York" target="_blank">📍地図</a></div></div>
     </div>
 
-    <div class="card day-card">
+    <div class="card day-card" id="day-6">
       <div class="day-head"><span class="date">9/24(木)</span><span class="weekday">Day 6</span></div>
-      <div class="day-tag">自由行動 / 空き夜</div>
-      <div class="slot"><div class="time">終日</div><div class="content"><b>自由行動(観光)</b><div class="sub">候補: ブロードウェイ博物館 等</div></div></div>
-      <div class="slot"><div class="time">夜</div><div class="content"><b>空き枠 — 追加ショー検討中</b><div class="sub">SIX ○19:00 / Rocky Horror ○19:00 / Heathers ○19:30 / Great Gatsby ○20:00(14:00マチネもあり) — 選択肢が最も豊富</div></div></div>
+      <div class="day-tag">ブロードウェイ博物館&amp;トリニティ教会&amp;タイムズスクエア</div>
+      <div class="slot"><div class="time">10:00-12:00</div><div class="content"><b>ブロードウェイ博物館</b><div class="sub">Museum of Broadway</div><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Museum+of+Broadway+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot move"><div class="time">🚇 約25〜30分</div><div class="content">タイムズスクエアから1系統でWall St駅、または4/5系統でWall St駅</div></div>
+      <div class="slot"><div class="time">12:30-14:00</div><div class="content"><b>トリニティ教会&amp;ウォール街散策</b><a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Trinity+Church+Wall+Street+New+York" target="_blank">📍地図</a></div></div>
+      <div class="slot"><div class="time">午後〜夜</div><div class="content"><b>タイムズスクエア周辺散策・お土産探し・カフェ</b><div class="sub">候補:MLB Flagship Store、Midtown Comics Times Square、Five Below、ディズニーストア、Mure and Grand(6th Ave)</div></div></div>
+      <div class="slot"><div class="time">時間があれば</div><div class="content"><b>ベッセル(Hudson Yards)、Petco</b><div class="sub">地下鉄7号線で1駅、34 St-Hudson Yards駅</div></div></div>
+      <div class="slot"><div class="time">昼/夜</div><div class="content"><b>空き枠 — 追加ショー検討中</b><div class="sub">SIX ○19:00 / Rocky Horror ○19:00 / Heathers ○19:30 / Great Gatsby ○20:00(14:00マチネもあり) / Wicked(2回目) ○19:00 / Hamilton(2回目) ○19:00 — 選択肢が最も豊富</div></div></div>
     </div>
 
-    <div class="card day-card">
+    <div class="card day-card" id="day-7">
       <div class="day-head"><span class="date">9/25(金)</span><span class="weekday">Day 7</span></div>
       <div class="day-tag">帰国日 ・ EWR発 10:00</div>
       <div class="note">✈ フライトはニューアーク空港(EWR)10:00発と仮定して計算しています(往路と同じ空港)。国際線は出発3時間前の空港到着が目安のため、空港着7:00を目標に逆算しました。</div>
@@ -368,14 +433,14 @@
 
     <div class="card show-card">
       <h3>Wicked</h3>
-      <div class="meta">9/20(日) 14:00(マチネ) ・ Gershwin Theatre ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Gershwin+Theatre+New+York" target="_blank">📍地図</a></div>
-      <div class="note">Broadway Direct経由で購入済み ・ FMEZZ Row D 109-110</div>
+      <div class="meta">9/20(日) 14:00(マチネ) ・ Gershwin Theatre(222 W 51st St) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Gershwin+Theatre+222+W+51st+St+New+York" target="_blank">📍地図</a></div>
+      <div class="note">Broadway Direct経由で購入済み ・ FMEZZ Row D 109-110 ・ 13:00劇場入り</div>
     </div>
 
     <div class="card show-card">
       <h3>Hamilton</h3>
       <div class="meta">9/22(火) 19:00 ・ Richard Rodgers Theatre ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Richard+Rodgers+Theatre+New+York" target="_blank">📍地図</a></div>
-      <div class="note">FMEZZ Row C 109-110 ・ 18:30劇場入り</div>
+      <div class="note">FMEZZ Row C 109-110 ・ 18:00劇場入り</div>
     </div>
 
     <div class="card show-card">
@@ -389,18 +454,33 @@
       <p style="font-size:0.85rem; font-weight:600; margin:0 0 4px;">9/20(日)夜</p>
       <ul class="plain" style="margin-bottom:10px;">
         <li>SIX ○19:00 / Rocky Horror Show ○19:00</li>
-        <li>Heathers × / Great Gatsby ×(15:00公演のみ)</li>
+        <li>Heathers × / Great Gatsby ×(15:00公演のみ) / Hamilton(2回目) ×</li>
       </ul>
       <p style="font-size:0.85rem; font-weight:600; margin:0 0 4px;">9/21(月)夜</p>
       <ul class="plain" style="margin-bottom:10px;">
         <li>SIX ○19:00 / Heathers ○19:00 / Great Gatsby ○19:00</li>
-        <li>Rocky Horror Show ×</li>
+        <li>Rocky Horror Show × / Hamilton(2回目) ×</li>
       </ul>
       <p style="font-size:0.85rem; font-weight:600; margin:0 0 4px;">9/24(木)夜 <span style="font-weight:400; color:var(--text-muted);">— 選択肢が最も豊富</span></p>
       <ul class="plain">
         <li>SIX ○19:00 / Rocky Horror Show ○19:00</li>
         <li>Heathers ○19:30(14:00マチネもあり) / Great Gatsby ○20:00(14:00マチネもあり)</li>
+        <li>Wicked(2回目) ○19:00 / Hamilton(2回目) ○19:00(Ham4Ham抽選)</li>
       </ul>
+      <p style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;">補足:Hamiltonは月曜休演・日曜マチネのみのため、2回目候補は木曜19:00のみ。Great Gatsbyは9/20が15:00のみで夜間上演なし。</p>
+    </div>
+
+    <h2 class="section-title" style="margin-top:22px;">チケット価格比較(2026年8月時点リサーチ)</h2>
+    <div class="card">
+      <table style="width:100%; border-collapse:collapse; font-size:0.78rem;">
+        <tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 2px;"><b>演目</b></td><td style="padding:4px 2px;"><b>デジタル抽選</b></td><td style="padding:4px 2px;"><b>ラッシュ/当日券</b></td></tr>
+        <tr style="border-bottom:1px dashed var(--border);"><td style="padding:4px 2px;">SIX</td><td style="padding:4px 2px;">$45(Broadway Direct・前日9-18時)</td><td style="padding:4px 2px;">立見$49</td></tr>
+        <tr style="border-bottom:1px dashed var(--border);"><td style="padding:4px 2px;">Rocky Horror</td><td style="padding:4px 2px;">$30(TodayTix・前日17時〜当日9時)</td><td style="padding:4px 2px;">当日券$30</td></tr>
+        <tr style="border-bottom:1px dashed var(--border);"><td style="padding:4px 2px;">Heathers</td><td style="padding:4px 2px;">$38(rush.telecharge・48時間前解禁)</td><td style="padding:4px 2px;">当日11時〜$38</td></tr>
+        <tr style="border-bottom:1px dashed var(--border);"><td style="padding:4px 2px;">Wicked(2回目)</td><td style="padding:4px 2px;">$55(Broadway Direct・前日9-15時)</td><td style="padding:4px 2px;">当日券$45</td></tr>
+        <tr style="border-bottom:1px dashed var(--border);"><td style="padding:4px 2px;">Great Gatsby</td><td style="padding:4px 2px;">$45(rush.telecharge・前日0-15時)</td><td style="padding:4px 2px;">当日券$40</td></tr>
+        <tr><td style="padding:4px 2px;">Hamilton(2回目)</td><td style="padding:4px 2px;">$10(Ham4Ham・毎週金10時〜翌木12時)</td><td style="padding:4px 2px;">なし</td></tr>
+      </table>
     </div>
 
     <h2 class="section-title" style="margin-top:22px;">割引コード(Broadway Week)</h2>
@@ -416,16 +496,82 @@
   <!-- 観光 -->
   <div class="view" id="view-sightseeing">
     <h2 class="section-title">観光候補地</h2>
+
+    <h2 class="section-title" style="margin-top:4px; font-size:0.85rem;">🌉 ブルックリン</h2>
     <div class="card">
       <div class="place-card"><div><div class="name">Brooklyn Bridge / DUMBO</div><div class="desc">橋の眺望とおしゃれエリア ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Brooklyn+Bridge+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
-      <div class="place-card"><div><div class="name">American Museum of Natural History</div><div class="desc">自然史博物館 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=American+Museum+of+Natural+History" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
-      <div class="place-card"><div><div class="name">Central Park</div><div class="desc">散策・休憩 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Central+Park+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
-      <div class="place-card"><div><div class="name">Grand Central Terminal</div><div class="desc">駅舎見学 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Grand+Central+Terminal+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
-      <div class="place-card"><div><div class="name">Union Square Greenmarket</div><div class="desc">マーケット ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Union+Square+Greenmarket+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
-      <div class="place-card"><div><div class="name">SoHo / West Village</div><div class="desc">街歩き・ショッピング ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=SoHo+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
-      <div class="place-card"><div><div class="name">Fishs Eddy</div><div class="desc">雑貨店 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Fishs+Eddy+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">DUMBO Manhattan Bridge View</div><div class="desc">撮影スポット ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=DUMBO+Manhattan+Bridge+View+Brooklyn" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
+      <div class="place-card"><div><div class="name">Annie's Blue Ribbon General Store</div><div class="desc">DUMBOの雑貨店 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Annie's+Blue+Ribbon+General+Store+DUMBO+Brooklyn" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
     </div>
 
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">🏛 アッパーウエストサイド</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">American Museum of Natural History</div><div class="desc">自然史博物館 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=American+Museum+of+Natural+History" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">Central Park</div><div class="desc">散策・休憩(博物館に隣接) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Central+Park+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">🚉 ミッドタウン</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">Grand Central Terminal</div><div class="desc">駅舎見学 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Grand+Central+Terminal+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">Midtown Comics Grand Central</div><div class="desc">グランドセントラル駅近くのコミック店 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Midtown+Comics+Grand+Central+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">Museum of Broadway</div><div class="desc">ブロードウェイ博物館 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Museum+of+Broadway+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">Midtown Comics Times Square</div><div class="desc">タイムズスクエアのコミック店 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Midtown+Comics+Times+Square+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">MLB Flagship Store</div><div class="desc">お土産・グッズ ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=MLB+Flagship+Store+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">Five Below</div><div class="desc">お土産・雑貨 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Five+Below+Times+Square+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">ディズニーストア</div><div class="desc">タイムズスクエア店 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Disney+Store+Times+Square+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+      <div class="place-card"><div><div class="name">Mure and Grand</div><div class="desc">6th Ave ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Mure+and+Grand+6th+Ave+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">⛪ ロウアーマンハッタン</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">Trinity Church & Wall Street</div><div class="desc">トリニティ教会&ウォール街散策 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Trinity+Church+Wall+Street+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">🛍 ユニオンスクエア・フラットアイアン</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">Union Square Greenmarket</div><div class="desc">マーケット ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Union+Square+Greenmarket+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
+      <div class="place-card"><div><div class="name">Fishs Eddy</div><div class="desc">雑貨店(889 Broadway) ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Fishs+Eddy+889+Broadway+New+York+NY+10003" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">🎨 ダウンタウン(SoHo・West Village)</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">SoHo / West Village</div><div class="desc">街歩き・ショッピング ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=SoHo+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:18px; font-size:0.85rem;">🏙 ハドソンヤード</h2>
+    <div class="card">
+      <div class="place-card"><div><div class="name">Vessel</div><div class="desc">Hudson Yardsのランドマーク ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Vessel+Hudson+Yards+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋外</span></div>
+      <div class="place-card"><div><div class="name">Petco</div><div class="desc">地下鉄7号線で1駅、34 St-Hudson Yards駅 ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=Petco+Hudson+Yards+New+York" target="_blank">📍地図</a></div></div><span class="pill">屋内</span></div>
+    </div>
+
+  </div>
+
+  <!-- グルメ -->
+  <div class="view" id="view-gourmet">
+    <div class="meal-toggle">
+      <button class="meal-btn active" data-meal="breakfast">🌅 朝食候補</button>
+      <button class="meal-btn" data-meal="lunch">🍽 ランチ候補</button>
+      <button class="meal-btn" data-meal="dinner">🌙 ディナー候補</button>
+      <button class="meal-btn" data-meal="snack">🥨 スナック候補</button>
+    </div>
+
+    <div class="gourmet-filters">
+      <select id="gourmet-area" class="day-select" style="margin-bottom:8px;">
+        <option value="all">エリア:すべて</option>
+        <option value="midtown">ミッドタウン・ヘルズキッチン</option>
+        <option value="uws">アッパーウエストサイド</option>
+        <option value="soho">SoHo・West Village</option>
+        <option value="nolita">ノリータ</option>
+        <option value="union">ユニオンスクエア・フラットアイアン</option>
+        <option value="grandcentral">グランドセントラル周辺</option>
+        <option value="hudsonyards">ハドソンヤード</option>
+        <option value="les">ロウアーイーストサイド</option>
+        <option value="brooklyn">ブルックリン</option>
+      </select>
+      <input type="text" id="gourmet-search" placeholder="🔍 店名・料理ジャンル・メモで検索" class="day-select">
+    </div>
+
+    <div id="gourmet-list"></div>
   </div>
 
   <!-- 周辺 -->
@@ -477,6 +623,7 @@
   <!-- タスク -->
   <div class="view" id="view-tasks">
     <h2 class="section-title">やることリスト <span style="font-weight:400; color:var(--text-muted); font-size:0.75rem;">(抽選・ラッシュ関連)</span></h2>
+    <p style="font-size:0.72rem; color:var(--text-muted); margin:-6px 0 10px;">★=当選時60分以内の即決済が必要。デジタル・ロッタリー=観劇2日前からrush.telecharge.comで応募($49、最大2枚)。デジタル・ラッシュ=観劇当日11:00から先着順販売($49)。</p>
     <div class="card" id="task-container">
       <p style="font-size:0.85rem; color:var(--text-muted);">読み込み中…</p>
     </div>
@@ -496,19 +643,111 @@
     });
   });
 
+  // ---- グルメタブ ----
+  const RESTAURANTS = [
+    { name: "Ben and Jack's Steakhouse 44th Street", area: "grandcentral", areaLabel: "グランドセントラル周辺", meals: ["lunch"], desc: "✅予約確定(9/21 11:30・2名・MANAMI KINJOU・確認番号2109838294) ・ 219 East 44th Street ・ Tel (212) 682-5678", query: "Ben and Jack's Steakhouse 219 East 44th Street New York" },
+    { name: "Joe's Pizza Broadway", area: "midtown", areaLabel: "ミッドタウン・ヘルズキッチン", meals: ["dinner"], desc: "NYスタイルの老舗ピザ ・ 1435 Broadway", query: "Joe's Pizza 1435 Broadway New York" },
+    { name: "Ellen's Stardust Diner", area: "midtown", areaLabel: "ミッドタウン・ヘルズキッチン", meals: ["lunch", "dinner"], desc: "ダイナー、歌う店員のライブが人気(現金チップ推奨) ・ 1650 Broadway", query: "Ellen's Stardust Diner 1650 Broadway New York" },
+    { name: "Mercado Little Spain", area: "hudsonyards", areaLabel: "ハドソンヤード", meals: ["lunch", "dinner"], desc: "スペイン料理のフードホール、タパス充実 ・ 10 Hudson Yards", query: "Mercado Little Spain 10 Hudson Yards New York" },
+    { name: "Five Leaves", area: "brooklyn", areaLabel: "ブルックリン(グリーンポイント)", meals: ["breakfast"], desc: "リコッタパンケーキが人気のニューアメリカン ・ 18 Bedford Ave, Brooklyn", query: "Five Leaves 18 Bedford Ave Brooklyn" },
+    { name: "Clinton St. Baking Company", area: "les", areaLabel: "ロウアーイーストサイド", meals: ["breakfast"], desc: "ブルーベリーパンケーキが名物 ・ 4 Clinton St", query: "Clinton St. Baking Company 4 Clinton St New York" },
+    { name: "Auntie Anne's", area: "midtown", areaLabel: "ミッドタウン・ヘルズキッチン", meals: ["snack"], desc: "プレッツェル専門店 ・ 664 8th Ave", query: "Auntie Anne's 664 8th Ave New York" },
+    { name: "Black Seed Bagels", area: "nolita", areaLabel: "ノリータ", meals: ["lunch"], desc: "手巻き・薪窯焼きのモントリオール式ベーグル ・ 170 Elizabeth St", query: "Black Seed Bagels 170 Elizabeth St New York" },
+    { name: "Ess-a-Bagel", area: "midtown", areaLabel: "ミッドタウン(イースト)", meals: ["lunch"], desc: "1976年創業の老舗ベーグル店、具だくさん ・ 770 Third Ave", query: "Ess-a-Bagel 770 Third Ave New York" },
+  ];
+
+  let currentMeal = 'breakfast';
+  const mealBtns = document.querySelectorAll('.meal-btn');
+  const areaSelect = document.getElementById('gourmet-area');
+  const searchInput = document.getElementById('gourmet-search');
+  const gourmetList = document.getElementById('gourmet-list');
+
+  function renderGourmet() {
+    const area = areaSelect.value;
+    const q = searchInput.value.trim().toLowerCase();
+    const filtered = RESTAURANTS.filter(r =>
+      r.meals.includes(currentMeal) &&
+      (area === 'all' || r.area === area) &&
+      (q === '' || r.name.toLowerCase().includes(q) || r.desc.toLowerCase().includes(q))
+    );
+
+    if (filtered.length === 0) {
+      gourmetList.innerHTML = '<div class="card"><p style="font-size:0.85rem; color:var(--text-muted); margin:0;">該当するお店が見つかりませんでした。</p></div>';
+      return;
+    }
+
+    // エリアごとにグループ化
+    const groups = {};
+    filtered.forEach(r => {
+      if (!groups[r.areaLabel]) groups[r.areaLabel] = [];
+      groups[r.areaLabel].push(r);
+    });
+
+    let html = '';
+    Object.keys(groups).forEach(areaLabel => {
+      html += `<h2 class="section-title" style="margin-top:16px; font-size:0.82rem;">${areaLabel}</h2><div class="card">`;
+      groups[areaLabel].forEach(r => {
+        html += `
+          <div class="place-card">
+            <div>
+              <div class="name">${r.name}</div>
+              <div class="desc">${r.desc} ・ <a class="maps-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.query)}" target="_blank">📍地図</a></div>
+            </div>
+          </div>`;
+      });
+      html += '</div>';
+    });
+    gourmetList.innerHTML = html;
+  }
+
+  mealBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      mealBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMeal = btn.dataset.meal;
+      renderGourmet();
+    });
+  });
+  areaSelect.addEventListener('change', renderGourmet);
+  searchInput.addEventListener('input', renderGourmet);
+  renderGourmet();
+
+  // 日程プルダウンで表示切替
+  const daySelect = document.getElementById('day-select');
+  const dayCards = document.querySelectorAll('#view-itinerary .day-card');
+  function showDay(id) {
+    dayCards.forEach(c => c.style.display = (c.id === id) ? '' : 'none');
+  }
+  showDay(daySelect.value);
+  daySelect.addEventListener('change', (e) => showDay(e.target.value));
+
   // ---- 共有タスクリスト (db capability) ----
   const DEFAULT_TASKS = [
-    { group: "毎日(到着後〜)", items: [
-      { id: "t1", text: "Broadway Direct 抽選に応募する", done: false },
+    { group: "9/19(土)", items: [
+      { id: "t1", text: "到着後:デジタル・ロッタリー Heathers/Great Gatsby(9/21分)応募 (rush.telecharge.com)", done: false },
     ]},
-    { group: "9/20(日)夜", items: [
-      { id: "t2", text: "SIX または Rocky Horror Show の抽選・ラッシュ確認", done: false },
+    { group: "9/20(日)", items: [
+      { id: "t2", text: "09:00 Broadway Directで9/21(月)分(SIX, Wicked)応募", done: false },
+      { id: "t3", text: "11:00 デジタル・ラッシュ Heathers/Great Gatsby(本日9/20分)", done: false },
+      { id: "t4", text: "13:00 Hamilton App(9/21分)当落確認", done: false },
+      { id: "t5", text: "★15:00 Broadway Direct(9/21分)当落確認・即決済(60分以内)", done: false },
     ]},
-    { group: "9/21(月)夜", items: [
-      { id: "t3", text: "SIX / Heathers / Great Gatsby いずれかの抽選・ラッシュ確認(rush.telecharge.com)", done: false },
+    { group: "9/21(月)", items: [
+      { id: "t6", text: "11:00 デジタル・ラッシュ Heathers/Great Gatsby(本日9/21分)", done: false },
     ]},
-    { group: "9/24(木)夜", items: [
-      { id: "t4", text: "SIX / Rocky Horror / Heathers / Great Gatsby から選んで抽選・ラッシュ確認", done: false },
+    { group: "9/22(火)", items: [
+      { id: "t7", text: "09:00 Broadway Directで9/23(水)分(SIX, Wicked)応募", done: false },
+      { id: "t8", text: "13:00 Hamilton App(9/23分)当落確認", done: false },
+      { id: "t9", text: "★15:00 Broadway Direct(9/23分)当落確認・即決済(60分以内)", done: false },
+      { id: "t10", text: "終日 デジタル・ロッタリー Heathers/Great Gatsby(9/24分)応募", done: false },
+    ]},
+    { group: "9/23(水)", items: [
+      { id: "t11", text: "09:00 Broadway Directで9/24(木)分(SIX, Wicked)応募", done: false },
+      { id: "t12", text: "13:00 Hamilton App(9/24分)当落確認", done: false },
+      { id: "t13", text: "★15:00 Broadway Direct(9/24分)当落確認・即決済(60分以内)", done: false },
+    ]},
+    { group: "9/24(木)", items: [
+      { id: "t14", text: "11:00 デジタル・ラッシュ Heathers/Great Gatsby(本日9/24分)", done: false },
     ]},
   ];
 
@@ -561,14 +800,6 @@
   const initialGroups = loadGroups();
   renderTasks(initialGroups);
   statusEl.textContent = 'このチェックはこの端末・このブラウザにのみ保存されます(他の人とは同期しません)';
-</script>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('service-worker.js').catch(() => {});
-    });
-  }
 </script>
 
 </body>
